@@ -167,6 +167,8 @@ export const coachTools: Tool[] = [
     },
   },
 
+  {
+    name: "update_program",
     description:
       "Modifies the user's workout program. Use to adjust exercise weights, swap exercises, change sets/reps, or update the program structure after weekly check-ins.",
     input_schema: {
