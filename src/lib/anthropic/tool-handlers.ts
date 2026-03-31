@@ -175,6 +175,71 @@ export async function executeTool(
         return JSON.stringify({ success: true, log: data });
       }
 
+      case "log_workout": {
+        const date = (toolInput.date as string) || today;
+        const durationSec = toolInput.duration_min ? (toolInput.duration_min as number) * 60 : null;
+        const exercises = (toolInput.exercises as Array<{
+          name: string;
+          sets?: Array<{ weight_kg?: number; weight_lbs?: number; reps?: number; duration_sec?: number }>;
+        }>) || [];
+
+        const { data: workout, error: workoutError } = await supabase
+          .from("workouts")
+          .insert({
+            user_id: userId,
+            workout_date: date,
+            name: toolInput.name as string,
+            duration_sec: durationSec,
+            notes: (toolInput.notes as string) || null,
+          })
+          .select()
+          .single();
+
+        if (workoutError) return JSON.stringify({ error: workoutError.message });
+
+        // Insert all sets
+        const sets: Array<Record<string, unknown>> = [];
+        for (const exercise of exercises) {
+          const exerciseSets = exercise.sets || [];
+          exerciseSets.forEach((s, idx) => {
+            // Convert lbs to kg if needed
+            let weightKg = s.weight_kg ?? null;
+            if (!weightKg && s.weight_lbs) weightKg = Math.round(s.weight_lbs * 0.453592 * 10) / 10;
+            sets.push({
+              workout_id: workout.id,
+              user_id: userId,
+              exercise: exercise.name,
+              set_number: idx + 1,
+              weight_kg: weightKg,
+              reps: s.reps ?? s.duration_sec ?? null,
+              completed: true,
+            });
+          });
+        }
+
+        if (sets.length > 0) {
+          await supabase.from("workout_sets").insert(sets);
+        }
+
+        // Mark workout done in daily log
+        await supabase.rpc("upsert_daily_log", {
+          p_user_id: userId,
+          p_date: date,
+          p_steps: null,
+          p_water_ml: null,
+          p_sleep_hours: null,
+          p_stretching: null,
+          p_notes: null,
+        });
+
+        return JSON.stringify({
+          success: true,
+          workout_id: workout.id,
+          exercises_logged: exercises.length,
+          sets_logged: sets.length,
+        });
+      }
+
       case "update_program": {
         const { data: currentProgram } = await supabase
           .from("program")

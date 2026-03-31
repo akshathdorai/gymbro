@@ -15,5 +15,5 @@ export default async function RootPage() {
 
   if (!profile?.onboarding_complete) redirect("/onboarding");
 
-  redirect("/dashboard");
+  redirect("/chat");
 }

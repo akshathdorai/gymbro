@@ -33,6 +33,7 @@ const TOOL_LABELS: Record<string, string> = {
   get_weight_history: "Fetching weight history...",
   get_user_profile: "Loading profile...",
   log_daily_entry: "Logging entry...",
+  log_workout: "Logging workout...",
   update_program: "Updating program...",
   update_targets: "Updating targets...",
   get_progress_summary: "Getting progress summary...",

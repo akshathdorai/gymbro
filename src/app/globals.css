@@ -2,19 +2,19 @@
 
 @theme {
   /* Dark-first color palette */
-  --color-background: #0a0a0f;
-  --color-surface: #111118;
-  --color-surface-raised: #1a1a24;
-  --color-border: #2a2a38;
-  --color-border-subtle: #1e1e2a;
-  --color-foreground: #f0f0f5;
-  --color-muted: #6b6b80;
-  --color-muted-foreground: #9090a8;
+  --color-background: #060610;
+  --color-surface: #0d0d1f;
+  --color-surface-raised: #13132b;
+  --color-border: #1e1e3f;
+  --color-border-subtle: #161630;
+  --color-foreground: #f0f0ff;
+  --color-muted: #6060a0;
+  --color-muted-foreground: #8888c0;
 
   /* Brand */
-  --color-primary: #4f7cff;
-  --color-primary-hover: #6b94ff;
-  --color-primary-muted: #1a2d6b;
+  --color-primary: #3b82f6;
+  --color-primary-hover: #60a5fa;
+  --color-primary-muted: #1e3a8a;
 
   /* Accent colors for metrics */
   --color-success: #22c55e;

@@ -112,7 +112,61 @@ export const coachTools: Tool[] = [
     },
   },
   {
-    name: "update_program",
+    name: "log_workout",
+    description:
+      "Logs a completed workout session from conversation. Use when the user mentions they finished a workout, describes exercises they did, or reports sets/reps/weights. Extract all details from the conversation and log them.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        date: {
+          type: "string",
+          description: "ISO date string YYYY-MM-DD. Defaults to today.",
+        },
+        workout_key: {
+          type: "string",
+          description: "Workout key: A, B, or C (if known from program)",
+        },
+        name: {
+          type: "string",
+          description: "Workout name e.g. 'Workout A - Upper Body Push'",
+        },
+        duration_min: {
+          type: "number",
+          description: "Duration in minutes (if mentioned)",
+        },
+        notes: {
+          type: "string",
+          description: "Any notes the user mentioned about how the workout went",
+        },
+        exercises: {
+          type: "array",
+          description: "List of exercises performed",
+          items: {
+            type: "object",
+            properties: {
+              name: { type: "string", description: "Exercise name" },
+              sets: {
+                type: "array",
+                description: "Each set performed",
+                items: {
+                  type: "object",
+                  properties: {
+                    weight_kg: { type: "number", description: "Weight in kg" },
+                    weight_lbs: { type: "number", description: "Weight in lbs (will be converted to kg)" },
+                    reps: { type: "number", description: "Reps completed" },
+                    duration_sec: { type: "number", description: "Duration in seconds (for timed exercises)" },
+                  },
+                },
+              },
+            },
+            required: ["name"],
+          },
+        },
+      },
+      required: ["name"],
+    },
+  },
+
     description:
       "Modifies the user's workout program. Use to adjust exercise weights, swap exercises, change sets/reps, or update the program structure after weekly check-ins.",
     input_schema: {
