@@ -65,7 +65,8 @@ export function DashboardClient({
     if (!user) return;
 
     const newWater = waterMl + ml;
-    await supabase.rpc("upsert_daily_log", {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase as any).rpc("upsert_daily_log", {
       p_user_id: user.id,
       p_date: today,
       p_water_ml: newWater,

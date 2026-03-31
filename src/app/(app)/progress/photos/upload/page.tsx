@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useState, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft, Camera, Upload } from "lucide-react";
@@ -10,6 +11,14 @@ import { todayISO, cn } from "@/lib/utils";
 type Angle = "front" | "side" | "back";
 
 export default function UploadPhotoPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-32"><div className="animate-spin w-6 h-6 border-2 border-[var(--color-primary)] border-t-transparent rounded-full" /></div>}>
+      <UploadPhotoContent />
+    </Suspense>
+  );
+}
+
+function UploadPhotoContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const defaultAngle = (searchParams.get("angle") as Angle) || "front";

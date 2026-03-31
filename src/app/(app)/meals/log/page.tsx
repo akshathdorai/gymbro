@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useState, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Camera, Search, Star, ChevronLeft, X, Check, Loader2 } from "lucide-react";
@@ -25,6 +26,14 @@ interface MealData {
 const MEAL_TYPES: MealType[] = ["breakfast", "lunch", "dinner", "snack", "other"];
 
 export default function LogMealPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-32"><div className="animate-spin w-6 h-6 border-2 border-[var(--color-primary)] border-t-transparent rounded-full" /></div>}>
+      <LogMealContent />
+    </Suspense>
+  );
+}
+
+function LogMealContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialMode = (searchParams.get("mode") as Mode) || "select";

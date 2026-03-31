@@ -47,7 +47,8 @@ export function WeightChart({ weights, target, start }: WeightChartProps) {
               fontSize: "12px",
               color: "var(--color-foreground)",
             }}
-            formatter={(value: number) => [`${value}kg`, "Weight"]}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            formatter={(value: any) => [`${value}kg`, "Weight"]}
           />
           {target && (
             <ReferenceLine

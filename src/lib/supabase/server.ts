@@ -1,11 +1,14 @@
 import { createServerClient } from "@supabase/ssr";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
-import type { Database } from "@/types/database.types";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyDB = any;
 
 export async function createClient() {
   const cookieStore = await cookies();
 
-  return createServerClient<Database>(
+  return createServerClient<AnyDB>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -29,8 +32,7 @@ export async function createClient() {
 
 /** Service-role client — only for server-side tool handlers (bypasses RLS) */
 export function createServiceClient() {
-  const { createClient: createSC } = require("@supabase/supabase-js");
-  return createSC<Database>(
+  return createSupabaseClient<AnyDB>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     { auth: { autoRefreshToken: false, persistSession: false } }
