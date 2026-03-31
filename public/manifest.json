@@ -1,0 +1,49 @@
+{
+  "name": "GymBro",
+  "short_name": "GymBro",
+  "description": "Your AI Personal Trainer",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a0f",
+  "orientation": "portrait",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Log Meal",
+      "url": "/meals/log",
+      "description": "Quickly log a meal"
+    },
+    {
+      "name": "Start Workout",
+      "url": "/workout",
+      "description": "Start today's workout"
+    },
+    {
+      "name": "Chat with Coach",
+      "url": "/chat",
+      "description": "Message your AI coach"
+    }
+  ],
+  "categories": ["health", "fitness"],
+  "prefer_related_applications": false
+}
