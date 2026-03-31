@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Send, Dumbbell, TrendingUp, Utensils, RefreshCcw, Download } from "lucide-react";
+import { Send, Dumbbell, TrendingUp, Utensils, RefreshCcw, Download, Settings } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -182,6 +183,9 @@ export default function ChatPage() {
               Install App
             </button>
           )}
+          <Link href="/settings" className="p-1.5 text-[var(--color-muted)]">
+            <Settings className="w-5 h-5" />
+          </Link>
         </div>
       </div>
 

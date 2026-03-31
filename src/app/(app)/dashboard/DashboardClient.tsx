@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import {
   Footprints, Droplets, Moon, Flame, Dumbbell, Zap,
-  ChevronRight, Plus, MessageCircle, CheckCircle2, Circle
+  ChevronRight, Plus, MessageCircle, CheckCircle2, Circle, Settings
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { RingProgress, ProgressBar } from "@/components/ui/progress";
@@ -100,10 +100,20 @@ export function DashboardClient({
           </h1>
         </div>
         {currentWeight && (
-          <div className="text-right">
-            <p className="text-2xl font-bold">{currentWeight}<span className="text-sm font-normal text-[var(--color-muted)]">kg</span></p>
-            <Link href="/progress" className="text-xs text-[var(--color-primary)]">Log weight</Link>
+          <div className="flex items-center gap-3">
+            <div className="text-right">
+              <p className="text-2xl font-bold">{currentWeight}<span className="text-sm font-normal text-[var(--color-muted)]">kg</span></p>
+              <Link href="/progress" className="text-xs text-[var(--color-primary)]">Log weight</Link>
+            </div>
+            <Link href="/settings" className="text-[var(--color-muted)]">
+              <Settings className="w-5 h-5" />
+            </Link>
           </div>
+        )}
+        {!currentWeight && (
+          <Link href="/settings" className="text-[var(--color-muted)]">
+            <Settings className="w-5 h-5" />
+          </Link>
         )}
       </div>
 
