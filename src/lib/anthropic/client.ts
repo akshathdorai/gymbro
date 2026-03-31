@@ -5,4 +5,4 @@ export const anthropic = new Anthropic({
 });
 
 export const COACH_MODEL = "claude-sonnet-4-6";
-export const MAX_TOKENS = 4096;
+export const MAX_TOKENS = 1024;

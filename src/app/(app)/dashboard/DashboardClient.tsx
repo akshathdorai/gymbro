@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
@@ -40,6 +40,25 @@ export function DashboardClient({
   const router = useRouter();
   const [waterLoading, setWaterLoading] = useState(false);
   const [currentLog, setCurrentLog] = useState(log);
+  const [currentMealTotals, setCurrentMealTotals] = useState(mealTotals);
+
+  // Re-fetch meal totals when tab becomes visible (handles day change + chat logging)
+  useEffect(() => {
+    async function refreshMeals() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data } = await supabase.from("meals").select("calories,protein_g,carbs_g,fat_g").eq("user_id", user.id).eq("log_date", today);
+      if (!data) return;
+      setCurrentMealTotals(data.reduce(
+        (acc, m) => ({ calories: acc.calories + (m.calories || 0), protein: acc.protein + (m.protein_g || 0), carbs: acc.carbs + (m.carbs_g || 0), fat: acc.fat + (m.fat_g || 0) }),
+        { calories: 0, protein: 0, carbs: 0, fat: 0 }
+      ));
+    }
+    refreshMeals();
+    document.addEventListener("visibilitychange", refreshMeals);
+    return () => document.removeEventListener("visibilitychange", refreshMeals);
+  }, [today]);
 
   const t = targets;
   const calorieTarget = t?.calorie_target || 1800;
@@ -128,10 +147,10 @@ export function DashboardClient({
           </div>
           <div className="grid grid-cols-4 gap-2">
             {[
-              { label: "Cal", value: mealTotals.calories, target: calorieTarget, color: "var(--color-calories)", unit: "" },
-              { label: "Protein", value: Math.round(mealTotals.protein), target: proteinTarget, color: "var(--color-protein)", unit: "g" },
-              { label: "Carbs", value: Math.round(mealTotals.carbs), target: t?.carb_target_g || 180, color: "var(--color-carbs)", unit: "g" },
-              { label: "Fat", value: Math.round(mealTotals.fat), target: t?.fat_target_g || 55, color: "var(--color-fat)", unit: "g" },
+              { label: "Cal", value: currentMealTotals.calories, target: calorieTarget, color: "var(--color-calories)", unit: "" },
+              { label: "Protein", value: Math.round(currentMealTotals.protein), target: proteinTarget, color: "var(--color-protein)", unit: "g" },
+              { label: "Carbs", value: Math.round(currentMealTotals.carbs), target: t?.carb_target_g || 180, color: "var(--color-carbs)", unit: "g" },
+              { label: "Fat", value: Math.round(currentMealTotals.fat), target: t?.fat_target_g || 55, color: "var(--color-fat)", unit: "g" },
             ].map((m) => (
               <div key={m.label} className="flex flex-col items-center gap-1">
                 <RingProgress value={m.value} max={m.target} size={64} strokeWidth={5} color={m.color}>
@@ -270,13 +289,13 @@ export function DashboardClient({
       </div>
 
       {/* Coach CTA if protein is low */}
-      {mealTotals.protein < proteinTarget * 0.5 && mealTotals.calories > 0 && (
+      {currentMealTotals.protein < proteinTarget * 0.5 && currentMealTotals.calories > 0 && (
         <Card className="border-[var(--color-warning)] bg-[var(--color-warning-muted)]">
           <CardContent className="pt-3 pb-3">
             <div className="flex items-center gap-2">
               <Zap className="w-4 h-4 text-[var(--color-warning)] shrink-0" />
               <p className="text-xs text-[var(--color-warning)]">
-                Protein is at {Math.round(mealTotals.protein)}g. You need {proteinTarget}g. Prioritize a protein source at your next meal.
+                Protein is at {Math.round(currentMealTotals.protein)}g. You need {proteinTarget}g. Prioritize a protein source at your next meal.
               </p>
             </div>
           </CardContent>
