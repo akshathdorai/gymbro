@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Send, Dumbbell, TrendingUp, Utensils, RefreshCcw } from "lucide-react";
+import { Send, Dumbbell, TrendingUp, Utensils, RefreshCcw, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -45,9 +45,16 @@ export default function ChatPage() {
   const [streaming, setStreaming] = useState(false);
   const [activeTools, setActiveTools] = useState<ToolEvent[]>([]);
   const [hydrated, setHydrated] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState<any>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const streamingMessageRef = useRef("");
+
+  useEffect(() => {
+    const handler = (e: any) => { e.preventDefault(); setInstallPrompt(e); };
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
 
   // Load message history
   useEffect(() => {
@@ -156,14 +163,25 @@ export default function ChatPage() {
     <div className="flex flex-col h-[calc(100vh-3.5rem)] max-w-lg mx-auto">
       {/* Header */}
       <div className="px-4 py-3 border-b border-[var(--color-border)] bg-[var(--color-background)]">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-[var(--color-primary)] flex items-center justify-center">
-            <Dumbbell className="w-4 h-4 text-white" />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-[var(--color-primary)] flex items-center justify-center">
+              <Dumbbell className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold">Coach</p>
+              <p className="text-xs text-[var(--color-muted)]">AI Personal Trainer</p>
+            </div>
           </div>
-          <div>
-            <p className="text-sm font-semibold">Coach</p>
-            <p className="text-xs text-[var(--color-muted)]">AI Personal Trainer</p>
-          </div>
+          {installPrompt && (
+            <button
+              onClick={() => { installPrompt.prompt(); setInstallPrompt(null); }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--color-primary)] text-white text-xs font-medium"
+            >
+              <Download className="w-3 h-3" />
+              Install App
+            </button>
+          )}
         </div>
       </div>
 
