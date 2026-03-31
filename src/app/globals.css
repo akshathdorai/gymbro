@@ -61,6 +61,23 @@
     color-scheme: dark;
   }
 
+  html.light {
+    color-scheme: light;
+    --color-background: #f0f4ff;
+    --color-surface: #ffffff;
+    --color-surface-raised: #e8eeff;
+    --color-border: #c7d4f5;
+    --color-border-subtle: #dce6ff;
+    --color-foreground: #0a0a1a;
+    --color-muted: #6b7280;
+    --color-muted-foreground: #4b5563;
+    --color-primary-muted: #dbeafe;
+    --color-success-muted: #dcfce7;
+    --color-warning-muted: #fef9c3;
+    --color-danger-muted: #fee2e2;
+    --color-info-muted: #cffafe;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);

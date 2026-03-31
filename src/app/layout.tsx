@@ -31,6 +31,7 @@ export default function RootLayout({
     <html lang="en" className="h-full dark">
       <head>
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){var t=localStorage.getItem('gymbro-theme');if(t==='light')document.documentElement.classList.add('light');})()` }} />
       </head>
       <body className="h-full antialiased overscroll-none">
         <ServiceWorkerRegistrar />
